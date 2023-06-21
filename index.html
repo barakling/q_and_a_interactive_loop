@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+</head>
+<body>
+    <h1>Chatbot</h1>
+    <div id="chatbox">
+        <p id="botStarterMessage">Hello, how can I help you?</p>
+    </div>
+    <div id="userInput">
+        <input id="textInput" type="text" name="msg" placeholder="Message">
+        <input id="buttonInput" type="submit" value="Send">
+    </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("#buttonInput").click(function() {
+        var userText = $("#textInput").val();
+        $.get("/get", { msg: userText }).done(function(data) {
+            var botHtml = '<p class="botText"><span id="botResponse"></span></p>';
+            $("#chatbox").append(botHtml);
+            typeResponse(data);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+        });
+    });
+});
+
+function typeResponse(response) {
+    var i = 0;
+    var isStartOfParagraph = true;
+    var intervalId = setInterval(function() {
+        if (i < response.length) {
+            if (isStartOfParagraph) {
+                document.getElementById('botResponse').innerHTML += '<p>';
+                isStartOfParagraph = false;
+            }
+            document.getElementById('botResponse').innerHTML += response.charAt(i);
+            if (response.charAt(i) === '.' || response.charAt(i) === '?' || response.charAt(i) === '!') {
+                document.getElementById('botResponse').innerHTML += '</p>';
+                isStartOfParagraph = true;
+            }
+            i++;
+        } else {
+            clearInterval(intervalId);
+        }
+    }, 50);  // The speed of typing, in milliseconds. Change as needed.
+}
+
+</script>
+
+
+</body>
+</html>
