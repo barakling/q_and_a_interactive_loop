@@ -7,7 +7,7 @@ FORBIDDEN_WORDS = ['globglob']  # Add your forbidden words here
 # Check for forbidden words in user_text
 
 # Create a chatbot using OpenAI API
-openai.api_key = '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'
+openai.api_key = ''
 
 def get_chatbot_response(user_text):
     response = openai.ChatCompletion.create(
